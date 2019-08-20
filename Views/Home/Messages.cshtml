@@ -1,0 +1,37 @@
+@{ ViewData["Title"] = "Home Page"; }
+@model MsgMsgsModel
+
+<div class="text-center">
+  <p>Post a Message</p>
+  <form asp-action="PostMessage" method="post">
+    <div class="form-group">
+      <label asp-for="Msg.Message"></label>
+      <input asp-for="Msg.Message" class="form-control">
+      <span asp-validation-for="Msg.Message"></span>
+    </div>
+    <button class="btn btn-primary">Post Message</button>
+  </form>
+  <br>
+
+  @foreach(var message in Model.Msgs)
+  {
+    if(message.isDeleteable)
+    {
+      <a asp-action="DeleteMessage" asp-route-id="@message.MessageId">
+        <button class="btn btn-danger btn-small float-sm-right">
+          Delete
+        </button>
+      </a>
+    }
+    <h6 class="text-left">@message.User.FirstName - @message.CreatedAt</h6>
+    <p class="text-left">@message.Message</p>
+    
+    foreach(var comment in message.Comments)
+    {
+      <h6 class="text-left comment">@comment.User.FirstName - @comment.CreatedAt</h6>
+      <p class="text-left comment">@comment.Comment</p>
+    }
+    CommentModel newComment = new CommentModel(){ MessageId = message.MessageId };
+    await Html.RenderPartialAsync("_NewCommentPartial", newComment);
+  }
+</div>

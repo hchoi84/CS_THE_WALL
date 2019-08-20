@@ -1,0 +1,10 @@
+@model CommentModel
+<form asp-action="PostComment" method="post">
+  <input hidden asp-for="MessageId">
+  <div class="form-group">
+    <label asp-for="Comment"></label>
+    <input asp-for="Comment" class="form-control">
+    <span asp-validation-for="Comment"></span>
+  </div>
+  <button class="btn btn-primary">Post Comment</button>
+</form>
